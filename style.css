@@ -1,0 +1,106 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin-top: 3rem;
+  margin-left: 3rem;
+}
+
+.container {
+  height: 90vh;
+  background-color: #000;
+  max-width: 360px;
+  border-radius: 2rem;
+  padding: 0.5rem;
+}
+
+.result-cal {
+  padding: 4rem 1.5rem 0.5rem 0.5rem;
+  font-size: 5rem;
+  display: flex;
+  justify-content: flex-end;
+  color: #fff;
+}
+
+.btn-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-row-gap: 1rem;
+  justify-content: center;
+  justify-items: center;
+}
+
+.btn-container .btn {
+  width: 4.2rem;
+  height: 4.2rem;
+
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.btn-container .btn.func {
+  color: #000;
+}
+
+.btn-container .btn.func.ac {
+  font-size: 1.7rem;
+}
+
+.btn-container .btn.operator {
+  font-size: 2.5rem;
+}
+
+.btn-container .btn-parent.btn-parent-0 {
+  width: 100%;
+  grid-column: 1/2 span;
+  border-radius: 3rem;
+}
+
+.btn-container .number-0 {
+  width: 100%;
+  justify-content: start;
+  padding-left: 2rem;
+}
+
+.btn-container .btn-parent {
+  background: #333;
+  border-radius: 50%;
+  z-index: 999;
+}
+
+.btn-container .func-parent {
+  background: #ddd;
+  border-radius: 50%;
+  z-index: 999;
+}
+
+.btn-container .operator-parent {
+  background-color: #f8c12a;
+  border-radius: 50%;
+  z-index: 999;
+}
+
+.btn-container .btn:active {
+  background: rgba(255, 255, 255, 0.342);
+  transition: background 0.2s ease-in-out;
+}
+
+.btn-container .btn.func:active {
+  background: rgba(255, 255, 255, 0.774);
+  transition: background 0.2s ease-in-out;
+}
+
+.btn-container .btn-parent.btn-parent-0 .btn:active {
+  border-radius: 3rem;
+}
