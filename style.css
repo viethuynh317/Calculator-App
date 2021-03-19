@@ -92,14 +92,19 @@ body {
 
 .btn-container .btn:active {
   background: rgba(255, 255, 255, 0.342);
-  transition: background 0.2s ease-in-out;
+  transition: background 0.1s ease-in-out;
 }
 
 .btn-container .btn.func:active {
   background: rgba(255, 255, 255, 0.774);
-  transition: background 0.2s ease-in-out;
+  transition: background 0.1s ease-in-out;
 }
 
 .btn-container .btn-parent.btn-parent-0 .btn:active {
   border-radius: 3rem;
+}
+
+.btn-container .operator-parent .operator-active {
+  color: #f8c12a;
+  background: #fff;
 }

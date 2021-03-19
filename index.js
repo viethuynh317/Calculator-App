@@ -53,13 +53,27 @@ const listNumberEle = [
 
 resultCal.textContent = '0';
 
+
 let strValueInMemory = null;
 let operatorInMemory = null;
+let expressionInMemory = null;
 
+
+let temp = 1;
+let toggleACAndC = true;
 
 const getCurrentStringValue = () => resultCal.textContent.split(',').join('');
 
 const getCurrentNumberValue = () => parseFloat(getCurrentStringValue);
+
+
+const removeOperatorActive = () => {
+  divOperatorEle.classList.remove('operator-active');
+  mulOperatorEle.classList.remove('operator-active');
+  subOperatorEle.classList.remove('operator-active');
+  sumOperatorEle.classList.remove('operator-active');
+}
+
 
 const setUpdateResult = (numberStr) => {
 
@@ -71,66 +85,146 @@ const setUpdateResult = (numberStr) => {
   const [number, decimal] = numberStr.split('.');
 
   if (decimal) {
-    resultCal.textContent = numberStr;
+    resultCal.textContent = Number(number).toLocaleString() + '.' + decimal;
   } else {
-    resultCal.textContent = number.toString();
+    resultCal.textContent = Number(number).toLocaleString();
   }
   
 
 }
 
+
 const handleNumberClick = (number) => {
   const currentStringValue = getCurrentStringValue();
-  
-  if (currentStringValue === '0') {
+  toggleACAndC = false;
+
+  acFuncEle.textContent = toggleACAndC ? 'AC' : 'C';
+
+
+  const compare = temp !== null ? temp : currentStringValue;
+  if (compare.toString() === '0') {
     setUpdateResult(number.toString());
+    temp = 1;
     return;
   }
-
+  
   setUpdateResult(currentStringValue + number);
 
 }
 
 const resultCalWithOperator = () => {
   const currentStringValue = getCurrentStringValue();
-  const currentNumberValue = parseFloat(currentStringValue);
-  const numberInMemory = parseFloat(strValueInMemory);
+  const currentNumberValue = Number(currentStringValue);
+  const numberInMemory = Number(strValueInMemory);
   let result;
 
+  
   switch(operatorInMemory) {
     case 'div': 
-      result = numberInMemory / currentNumberValue;
+      result = currentNumberValue ? numberInMemory / currentNumberValue : currentNumberValue;
+      divOperatorEle.classList.add('operator-active');
+      mulOperatorEle.classList.remove('operator-active');
+      subOperatorEle.classList.remove('operator-active');
+      sumOperatorEle.classList.remove('operator-active');
       break;
     case 'mul':
       result = numberInMemory * currentNumberValue;
+      divOperatorEle.classList.remove('operator-active');
+      mulOperatorEle.classList.add('operator-active');
+      subOperatorEle.classList.remove('operator-active');
+      sumOperatorEle.classList.remove('operator-active');
       break;
     case 'sub':
       result = numberInMemory - currentNumberValue;
+      divOperatorEle.classList.remove('operator-active');
+      mulOperatorEle.classList.remove('operator-active');
+      subOperatorEle.classList.add('operator-active');
+      sumOperatorEle.classList.remove('operator-active');
       break;
 
     case 'sum':
       result = numberInMemory + currentNumberValue;
+      divOperatorEle.classList.remove('operator-active');
+      mulOperatorEle.classList.remove('operator-active');
+      subOperatorEle.classList.remove('operator-active');
+      sumOperatorEle.classList.add('operator-active');
       break;
   }
-
+  
   return result.toString();
 } 
+
+// const resultCalWithOperator1 = () => {
+//   const currentStringValue = getCurrentStringValue();
+//   const currentNumberValue = Number(currentStringValue);
+//   const numberInMemory = Number(strValueInMemory);
+//   let result;
+
+  
+//   switch(operatorInMemory) {
+//     case 'div': 
+//       result = currentNumberValue ? numberInMemory / currentNumberValue : currentNumberValue;
+//       divOperatorEle.classList.add('operator-active');
+//       mulOperatorEle.classList.remove('operator-active');
+//       subOperatorEle.classList.remove('operator-active');
+//       sumOperatorEle.classList.remove('operator-active');
+//       break;
+//     case 'mul':
+//       result = numberInMemory * currentNumberValue;
+//       divOperatorEle.classList.remove('operator-active');
+//       mulOperatorEle.classList.add('operator-active');
+//       subOperatorEle.classList.remove('operator-active');
+//       sumOperatorEle.classList.remove('operator-active');
+//       break;
+//     case 'sub':
+//       result = numberInMemory - currentNumberValue;
+//       divOperatorEle.classList.remove('operator-active');
+//       mulOperatorEle.classList.remove('operator-active');
+//       subOperatorEle.classList.add('operator-active');
+//       sumOperatorEle.classList.remove('operator-active');
+//       break;
+
+//     case 'sum':
+//       result = numberInMemory + currentNumberValue;
+//       divOperatorEle.classList.remove('operator-active');
+//       mulOperatorEle.classList.remove('operator-active');
+//       subOperatorEle.classList.remove('operator-active');
+//       sumOperatorEle.classList.add('operator-active');
+//       break;
+//   }
+  
+//   return result.toString();
+// } 
+
 
 const handleOperatorClick = (operator) => {
 
   const currentValueString = getCurrentStringValue();
-  const numberInMemory = parseFloat(strValueInMemory);
+  const numberInMemory = Number(strValueInMemory);
   
   if(!strValueInMemory) {
     strValueInMemory = currentValueString;
+    
     operatorInMemory = operator;
-    setUpdateResult('0');
+    
+    setUpdateResult(currentValueString);
+    resultCalWithOperator();
+    temp = 0;
     return;
   }
 
-  strValueInMemory = resultCalWithOperator();
+  console.log('str1', strValueInMemory);
+
+  setUpdateResult(resultCalWithOperator());
+  
+  // strValueInMemory = resultCalWithOperator();
+
+  strValueInMemory = getCurrentStringValue();
   operatorInMemory = operator
-  setUpdateResult('0');
+  resultCalWithOperator()
+  // setUpdateResult('0');
+  temp = 0;
+  
 }
 
 // Event Click of Numbers Button
@@ -138,6 +232,7 @@ const handleOperatorClick = (operator) => {
 for (let i = 0 ; i < listNumberEle.length ; i++) {
   listNumberEle[i].addEventListener('click', () => {
     handleNumberClick(i);
+    removeOperatorActive();
   });
 }
 
@@ -153,8 +248,14 @@ dotDecimalEle.addEventListener('click', () => {
 
 acFuncEle.addEventListener('click', () => {
   setUpdateResult('0');
+
+  if (toggleACAndC) removeOperatorActive();
+
+  toggleACAndC = true;
+  acFuncEle.textContent = toggleACAndC ? 'AC' : 'C';
   strValueInMemory = null;
   operatorInMemory = null;
+  
 });
 
 pmFuncEle.addEventListener('click', () => {
@@ -175,7 +276,7 @@ pmFuncEle.addEventListener('click', () => {
 
 percFuncEle.addEventListener('click', () => {
   const currentStringValue = getCurrentStringValue();
-  const percentResult = parseFloat(currentStringValue) / 100;
+  const percentResult = Number(currentStringValue) / 100;
   setUpdateResult(percentResult.toString());
 });
 
@@ -198,15 +299,14 @@ sumOperatorEle.addEventListener('click', () => {
 });
 
 equalOperatorEle.addEventListener('click', () => {
-  const numberInMemory = parseFloat(strValueInMemory);
+  const numberInMemory = Number(strValueInMemory);
   const currentStringValue = getCurrentStringValue();
-
  
-  if(currentStringValue){
+  if(strValueInMemory){
     setUpdateResult(resultCalWithOperator());
     operatorInMemory = null;
     strValueInMemory = null;
   }
-
+  removeOperatorActive();
 });
 
