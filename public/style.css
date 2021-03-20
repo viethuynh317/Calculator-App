@@ -108,3 +108,15 @@ body {
   color: #f8c12a;
   background: #fff;
 }
+
+.btn-container .length-5 {
+  font-size: 4.5rem;
+}
+
+.btn-container .length-6 {
+  font-size: 4rem;
+}
+
+.btn-container .length-7 {
+  font-size: 3.5rem;
+}
